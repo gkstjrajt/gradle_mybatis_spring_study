@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="gradle_mybatis_spring_study.mapper.StudentMapper">
+<sql id="selectSQL">
+	SELECT STUD_ID, NAME, EMAIL, PHONE, DOB FROM STUDENTS
+</sql>
+<sql id="whereSQL">
+	<where>
+		<if test="studId != null">
+			STUD_ID = #{studId}
+		</if>
+	</where>
+</sql>
+
 	<!-- TypeHandler 이용 -->
 	<select id="selectStudentByNo" parameterType="Student" resultType="Student">
-		SELECT STUD_ID AS STUDID, NAME, EMAIL, PHONE, DOB FROM STUDENTS WHERE STUD_ID = #{studId}
+		<include refid="selectSQL" />
+		<include refid="whereSQL" />
 	</select>
 	
 	<!-- ResultMap 이용 -->
@@ -15,5 +27,9 @@
 	</resultMap>
 	<select id="selectStudentByNoWithResultMap" parameterType="Student" resultMap="stdResult">
 		SELECT STUD_ID, NAME, EMAIL, DOB, SUBSTR(PHONE, 1, 3) AS F, SUBSTR(PHONE, 5, 3) AS M, SUBSTR(PHONE, 9, 4) AS L FROM STUDENTS WHERE STUD_ID = #{studId}
+	</select>
+	
+	<select id="selectStudentByAll" resultType="Student">
+		<include refid="selectSQL"></include>
 	</select>
 </mapper>
