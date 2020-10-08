@@ -24,7 +24,6 @@ public class ContextDataSource {
 			dataSource = new HikariDataSource(cfg);
 			dataSource.setMinimumIdle(10);
 			dataSource.setMaximumPoolSize(100);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

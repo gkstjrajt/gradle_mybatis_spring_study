@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@MapperScan(basePackages = { "gradle_mybatis_spring_study.mapper" }) /* ContextRoot에 있는 @ComponentScan과 맵핑시키기 위해 */
 public class ContextSqlSession {
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -22,7 +23,7 @@ public class ContextSqlSession {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource);
 		factoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
-//		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/*Mapper.xml"));
+		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/*Mapper.xml"));
 		
 		return factoryBean;
 	}
