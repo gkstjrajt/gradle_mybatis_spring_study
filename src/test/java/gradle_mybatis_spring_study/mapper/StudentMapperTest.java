@@ -3,6 +3,8 @@ package gradle_mybatis_spring_study.mapper;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -26,11 +28,11 @@ import gradle_mybatis_spring_study.dto.Student;
 public class StudentMapperTest {
 	protected static final Log log = LogFactory.getLog(StudentMapperTest.class);
 
-	@After			// 결과화면에서 테스트 하나 실행 후 한줄 띄워서 다른 테스트 실행하기 위해서
+	@After // 결과화면에서 테스트 하나 실행 후 한줄 띄워서 다른 테스트 실행하기 위해서
 	public void tearDown() throws Exception {
 		System.out.println();
 	}
-	
+
 	@Autowired
 	private StudentMapper mapper;
 
@@ -43,7 +45,7 @@ public class StudentMapperTest {
 		Assert.assertNotNull(selectedStd);
 		log.debug(selectedStd.toString());
 	}
-	
+
 	@Test
 	public void test02SelectStudentByNoWithResultMap() {
 		System.out.println("selectStudentByNoWithResultMap");
@@ -53,7 +55,7 @@ public class StudentMapperTest {
 		Assert.assertNotNull(selectedStd);
 		log.debug(selectedStd.toString());
 	}
-	
+
 	@Test
 	public void test01SelectStudentByAll() {
 		System.out.println("selectStudentByAll");
@@ -61,13 +63,13 @@ public class StudentMapperTest {
 		Assert.assertNotNull(stdList);
 		stdList.stream().forEach(System.out::println);
 	}
-	
+
 	@Test
 	public void test03InsertStudent() {
 		System.out.println("insertStudent");
 		Calendar newDate = GregorianCalendar.getInstance();
 		newDate.set(1998, 1, 16);
-		
+
 		System.out.println("insertStudent");
 		Student student = new Student();
 		student.setStudId(4);
@@ -78,7 +80,7 @@ public class StudentMapperTest {
 		int res = mapper.insertStudent(student);
 		Assert.assertEquals(1, res);
 	}
-	
+
 	@Test
 	public void test04UpdateStudent() {
 		System.out.println("updateStudent");
@@ -90,7 +92,7 @@ public class StudentMapperTest {
 		int res = mapper.updateStudent(student);
 		Assert.assertEquals(1, res);
 	}
-	
+
 	@Test
 	public void test06DeleteStudent() {
 		System.out.println("deleteStudent");
@@ -98,6 +100,36 @@ public class StudentMapperTest {
 		student.setStudId(4);
 		int res = mapper.deleteStudent(student);
 		Assert.assertEquals(1, res);
+	}
+
+	@Test
+	public void test7SelectStudentByAllForResutlMap() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		List<Student> list = mapper.selectStudentByAllForResultMap();
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+	}
+
+	@Test
+	public void test8SelectStudentByAllForHashMap() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		List<Map<String, Object>> list = mapper.selectStudentByAllForHashMap();
+		Assert.assertNotNull(list);
+		for (Map<String, Object> map : list) {
+			for (Entry<String, Object> e : map.entrySet()) {
+				log.debug(String.format("%s -> %s", e.getKey(), e.getValue()));
+			}
+		}
+	}
+	
+	@Test
+	public void test9SelectStudentByNoAssociation() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		Student student = new Student();
+		student.setStudId(1);
+		Student seletedStd = mapper.selectStudentByNoAssociation(student);
+		Assert.assertNotNull(seletedStd);
+		log.debug(seletedStd.toString());
 	}
 
 }
