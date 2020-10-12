@@ -1,5 +1,7 @@
 package gradle_mybatis_spring_study.mapper;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.ibatis.logging.Log;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gradle_mybatis_spring_study.config.ContextRoot;
+import gradle_mybatis_spring_study.dto.PhoneNumber;
 import gradle_mybatis_spring_study.dto.Student;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,17 +35,17 @@ public class StudentMapperTest {
 	private StudentMapper mapper;
 
 	@Test
-	public void testSelectStudentByNo() {
+	public void test05SelectStudentByNo() {
 		System.out.println("testSelectStudentByNo");
 		Student student = new Student();
-		student.setStudId(1);
+		student.setStudId(4);
 		Student selectedStd = mapper.selectStudentByNo(student);
 		Assert.assertNotNull(selectedStd);
 		log.debug(selectedStd.toString());
 	}
 	
 	@Test
-	public void selectStudentByNoWithResultMap() {
+	public void test02SelectStudentByNoWithResultMap() {
 		System.out.println("selectStudentByNoWithResultMap");
 		Student student = new Student();
 		student.setStudId(1);
@@ -52,11 +55,49 @@ public class StudentMapperTest {
 	}
 	
 	@Test
-	public void selectStudentByAll() {
+	public void test01SelectStudentByAll() {
 		System.out.println("selectStudentByAll");
 		List<Student> stdList = mapper.selectStudentByAll();
 		Assert.assertNotNull(stdList);
 		stdList.stream().forEach(System.out::println);
+	}
+	
+	@Test
+	public void test03InsertStudent() {
+		System.out.println("insertStudent");
+		Calendar newDate = GregorianCalendar.getInstance();
+		newDate.set(1998, 1, 16);
+		
+		System.out.println("insertStudent");
+		Student student = new Student();
+		student.setStudId(4);
+		student.setName("Doris");
+		student.setEmail("Doris@gmail.com");
+		student.setPhone(new PhoneNumber("555-666-3333"));
+		student.setDob(newDate.getTime());
+		int res = mapper.insertStudent(student);
+		Assert.assertEquals(1, res);
+	}
+	
+	@Test
+	public void test04UpdateStudent() {
+		System.out.println("updateStudent");
+		Student student = new Student();
+		student.setName("Ping");
+		student.setEmail("Ping@gmail.com");
+		student.setPhone(new PhoneNumber("322-1234-2211"));
+		student.setStudId(4);
+		int res = mapper.updateStudent(student);
+		Assert.assertEquals(1, res);
+	}
+	
+	@Test
+	public void test06DeleteStudent() {
+		System.out.println("deleteStudent");
+		Student student = new Student();
+		student.setStudId(4);
+		int res = mapper.deleteStudent(student);
+		Assert.assertEquals(1, res);
 	}
 
 }

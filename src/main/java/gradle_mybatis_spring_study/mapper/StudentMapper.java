@@ -12,4 +12,10 @@ public interface StudentMapper {
 	Student selectStudentByNoWithResultMap(Student student);
 	
 	List<Student> selectStudentByAll();
+	
+	int insertStudent(Student student);
+	
+	int updateStudent(Student student);
+	
+	int deleteStudent(Student student);
 }

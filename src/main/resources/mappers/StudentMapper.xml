@@ -32,4 +32,16 @@
 	<select id="selectStudentByAll" resultType="Student">
 		<include refid="selectSQL"></include>
 	</select>
+	
+	<insert id="insertStudent" parameterType="Student">
+		INSERT INTO STUDENTS(STUD_ID, NAME, EMAIL, PHONE, DOB) VALUES(#{studId}, #{name}, #{email}, #{phone}, #{dob})
+	</insert>
+	
+	<update id="updateStudent" parameterType="Student">
+		UPDATE STUDENTS SET NAME = #{name}, EMAIL = #{email}, PHONE = #{phone} WHERE STUD_ID = #{studId}
+	</update>
+	
+	<delete id="deleteStudent" parameterType="Student">
+		DELETE FROM STUDENTS WHERE STUD_ID = #{studId}
+	</delete>
 </mapper>
