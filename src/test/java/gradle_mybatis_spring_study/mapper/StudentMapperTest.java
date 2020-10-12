@@ -19,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gradle_mybatis_spring_study.config.ContextRoot;
+import gradle_mybatis_spring_study.dto.Gender;
 import gradle_mybatis_spring_study.dto.PhoneNumber;
 import gradle_mybatis_spring_study.dto.Student;
 
@@ -103,7 +104,7 @@ public class StudentMapperTest {
 	}
 
 	@Test
-	public void test7SelectStudentByAllForResutlMap() {
+	public void test10SelectStudentByAllForResutlMap() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		List<Student> list = mapper.selectStudentByAllForResultMap();
 		Assert.assertNotNull(list);
@@ -111,7 +112,7 @@ public class StudentMapperTest {
 	}
 
 	@Test
-	public void test8SelectStudentByAllForHashMap() {
+	public void test07SelectStudentByAllForHashMap() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		List<Map<String, Object>> list = mapper.selectStudentByAllForHashMap();
 		Assert.assertNotNull(list);
@@ -123,7 +124,7 @@ public class StudentMapperTest {
 	}
 	
 	@Test
-	public void test9SelectStudentByNoAssociation() {
+	public void test08SelectStudentByNoAssociation() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		Student student = new Student();
 		student.setStudId(1);
@@ -131,5 +132,47 @@ public class StudentMapperTest {
 		Assert.assertNotNull(seletedStd);
 		log.debug(seletedStd.toString());
 	}
+	
+	@Test
+	public void test09InsertEnumStudent() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName()+"()");
+		
+		Calendar newDate = GregorianCalendar.getInstance();
+		newDate.set(1990, 2, 28);
+		Student student = new Student();
+		student.setStudId(5);
+		student.setName("test");
+		student.setEmail("test@test.co.kr");
+		student.setDob(newDate.getTime());
+		student.setPhone(new PhoneNumber("010-1234-4555"));
+		student.setGender(Gender.FEMALE);
+		
+		int res = mapper.insertEnumStudent(student);
+		Assert.assertEquals(1, res);
+		
+		student.setStudId(6);
+		student.setName("gregoric");
+		student.setEmail("gregoric@gmail.com");
+		student.setDob(newDate.getTime());
+		student.setGender(Gender.FEMALE);
+		
+		int res1 = mapper.insertEnumStudent(student);
+		Assert.assertEquals(1, res1);
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

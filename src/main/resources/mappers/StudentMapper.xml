@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="gradle_mybatis_spring_study.mapper.StudentMapper">
 <sql id="selectSQL">
-	SELECT STUD_ID, NAME, EMAIL, PHONE, DOB FROM STUDENTS
+	SELECT STUD_ID, NAME, EMAIL, PHONE, DOB , GENDER FROM STUDENTS
 </sql>
 <sql id="whereSQL">
 	<where>
@@ -64,6 +64,11 @@
 	
 	<insert id="insertStudent" parameterType="Student">
 		INSERT INTO STUDENTS(STUD_ID, NAME, EMAIL, PHONE, DOB) VALUES(#{studId}, #{name}, #{email}, #{phone}, #{dob})
+	</insert>
+	
+	<!-- enum 타입 다루기 -->
+	<insert id="insertEnumStudent" parameterType="Student">
+		INSERT INTO STUDENTS(STUD_ID, NAME, EMAIL,PHONE, DOB, GENDER) VALUES(#{studId}, #{name}, #{email}, #{phone}, #{dob}, #{gender})
 	</insert>
 	
 	<update id="updateStudent" parameterType="Student">

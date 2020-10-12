@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<package name="gradle_mybatis_spring_study.dto"/>
 	</typeAliases>
 	<typeHandlers>
-		<package name="gradle_mybatis_spring_study.handlers"/>
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Gender"/>
+		<package name="gradle_mybatis_spring_study.handlers" />
 	</typeHandlers>
 </configuration>
