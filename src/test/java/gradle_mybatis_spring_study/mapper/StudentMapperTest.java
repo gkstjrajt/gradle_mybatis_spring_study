@@ -2,6 +2,7 @@ package gradle_mybatis_spring_study.mapper;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,7 +123,7 @@ public class StudentMapperTest {
 			}
 		}
 	}
-	
+
 	@Test
 	public void test08SelectStudentByNoAssociation() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
@@ -132,11 +133,11 @@ public class StudentMapperTest {
 		Assert.assertNotNull(seletedStd);
 		log.debug(seletedStd.toString());
 	}
-	
+
 	@Test
 	public void test09InsertEnumStudent() {
-		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName()+"()");
-		
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+
 		Calendar newDate = GregorianCalendar.getInstance();
 		newDate.set(1990, 2, 28);
 		Student student = new Student();
@@ -146,33 +147,62 @@ public class StudentMapperTest {
 		student.setDob(newDate.getTime());
 		student.setPhone(new PhoneNumber("010-1234-4555"));
 		student.setGender(Gender.FEMALE);
-		
+
 		int res = mapper.insertEnumStudent(student);
 		Assert.assertEquals(1, res);
-		
+
 		student.setStudId(6);
 		student.setName("gregoric");
 		student.setEmail("gregoric@gmail.com");
 		student.setDob(newDate.getTime());
 		student.setGender(Gender.FEMALE);
-		
+
 		int res1 = mapper.insertEnumStudent(student);
 		Assert.assertEquals(1, res1);
 	}
 
+	@Test
+	public void test11selectStudentByMap() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		Map<String, String> maps = new HashMap<String, String>();
+		maps.put("name", "Timothy");
+		maps.put("email", "timothy@gmail.com");
+		Student student = mapper.selectStudentByMap(maps);
+		Assert.assertNotNull(student);
+		log.debug(student.toString());
+
+		maps.remove("email");
+		student = mapper.selectStudentByMap(maps);
+		log.debug(student.toString());
+
+		maps.clear();
+		maps.put("email", "timothy@gmail.com");
+		student = mapper.selectStudentByMap(maps);
+		log.debug(student.toString());
+	}
+
+	@Test
+	public void test12selectAllStudentByMap() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		Map<String, String> maps = new HashMap<String, String>();
+		maps.put("name", "Timothy");
+		maps.put("email", "timothy@gmail.com");
+		List<Student> list = mapper.selectAllStudentByMap(maps);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+
+		maps.remove("email");
+		list = mapper.selectAllStudentByMap(maps);
+		list.stream().forEach(System.out::println);
+
+		maps.clear();
+		maps.put("email", "timothy@gmail.com");
+		list = mapper.selectAllStudentByMap(maps);
+		list.stream().forEach(System.out::println);
+
+		maps.clear();
+		list = mapper.selectAllStudentByMap(maps);
+		list.stream().forEach(System.out::println);
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

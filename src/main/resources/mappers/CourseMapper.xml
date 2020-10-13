@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="gradle_mybatis_spring_study.mapper.CourseMapper">
+<sql id="selectSql">
+	SELECT COURSE_ID, NAME, DESCRIPTION, START_DATE, END_DATE, TUTOR_ID FROM COURSES
+</sql>
+
+<sql id="whereSql">
+	<where>
+		<if test="tutorId != null">
+			AND TUTOR_ID = #{tutorId}
+		</if>
+		<if test="courseName != null">
+			AND NAME LIKE #{courseName}
+		</if>
+		<if test="startDate != null">
+			AND START_DATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+			AND END_DATE &lt;= #{endDate}
+		</if>
+	</where>
+</sql>
+
 	<resultMap type="Course" id="CourseResult">
 		<id column="course_id" property="courseId"/>
 		<result column="name" property="name"/>
@@ -8,4 +29,73 @@
 		<result column="start_date" property="startDate"/>
 		<result column="end_date" property="endDate"/>
 	</resultMap>
+	
+<!-- 동적 SQL - if조건 -->
+	<select id="selectCourseByCondition" parameterType="map" resultMap="CourseResult">
+		<include refid="selectSql" />
+		<include refid="whereSql" />
+	</select>
+	
+<!-- 동적SQL - choose 조건 -->
+	<select id="selectCaseCourses" parameterType="map" resultMap="CourseResult">
+		<include refid="selectSql" />
+		<choose>
+			<when test="searchBy == 'Tutor'">
+				WHERE TUTOR_ID = #{tutorId}
+			</when>
+			<when test="searchBy == 'CourseName'">
+				WHERE NAME LIKE #{courseName}
+			</when>
+			<otherwise>
+				WHERE END_DATE &gt;= now()
+			</otherwise>
+		</choose>
+	</select>
+	
+ <!-- 동적SQL - where 조건 -->
+ 	<sql id="whereSqlCDATA">
+ 		<where>
+ 			<if test="tutorId != null">
+ 				<![CDATA[ AND TUTOR_ID = #{tutorId}]]>
+ 			</if>
+ 			
+ 			<if test="courseName != null">
+ 				<![CDATA[ AND NAME LIKE #{courseName}]]>
+ 			</if>
+ 			
+ 			<if test="startDate != null">
+ 				<![CDATA[ AND START_DATE >= #{startDate}]]>
+ 			</if>
+ 			
+ 			<if test="endDate != null">
+ 				<![CDATA[ AND END_DATE <= #{endDate}]]>
+ 			</if>
+ 		</where>
+ 	</sql>
+ 	
+ 	<select id="selectWhereCourses" parameterType="map" resultMap="CourseResult">
+ 		<include refid="selectSql" />
+ 		<include refid="whereSqlCDATA" />
+ 	</select>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
