@@ -1,5 +1,7 @@
 package gradle_mybatis_spring_study.mapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -115,6 +117,85 @@ public class CourseMapperTest {
 		list = mapper.selectWhereCourses(map);
 		list.stream().forEach(System.out::println);
 		
+	}
+	
+	@Test
+	public void test06SelectTrimCourses() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Course> list = mapper.selectTrimCourses(map);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+		
+		map.put("tutorId", 1);
+		list = mapper.selectTrimCourses(map);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+		
+		map.clear();
+		map.put("courseName", "%Java%");
+		list = mapper.selectTrimCourses(map);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+		
+		map.put("tutorId", 1);
+		list = mapper.selectTrimCourses(map);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+	}
+	
+	@Test
+	public void test07SelectCoursesForeachByTutors() {
+		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		
+		List<Integer> tutorIds = new ArrayList<Integer>();
+		tutorIds.add(1);
+		tutorIds.add(2);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("tutorIds", tutorIds);
+		
+		List<Course> list = mapper.selectCoursesForeachByTutors(map);
+		Assert.assertNotNull(list);
+		list.stream().forEach(System.out::println);
+	}
+	
+	@Test
+	public void test08InsertCourses() {
+		List<Course> tutors = new ArrayList<Course>();
+		GregorianCalendar cal = new GregorianCalendar(2013, 1, 1);
+		tutors.add(new Course(4, "wowgood", "database", cal.getTime(), cal.getTime(), 3));
+		tutors.add(new Course(5, "wowgood", "database", cal.getTime(), cal.getTime(), 3));
+		tutors.add(new Course(6, "WindWind", "database", cal.getTime(), cal.getTime(), 4));
+		tutors.add(new Course(7, "expensive", "veryvery", cal.getTime(), cal.getTime(), 4));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("tutors", tutors);
+		
+		int res = mapper.insertCourses(map);
+		Assert.assertEquals(4, res);
+	}
+	
+	@Test
+	public void test09UpdateCourses() {
+		Course uc = new Course();
+		uc.setCourseId(7);
+		uc.setDescription("공짜 데이터베이스");
+		uc.setName("꽁짜디비");
+		int res = mapper.updateCourses(uc);
+		Assert.assertEquals(1, res);
+	}
+	
+	@Test
+	public void test10DeleteCourses() {
+		List<Integer> courseIds = Arrays.asList(4, 5, 6, 7);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("courseIds", courseIds);
+		
+		int res = mapper.deleteCourses(map);
+		Assert.assertEquals(4, res);
 	}
 }
 

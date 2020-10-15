@@ -106,6 +106,17 @@
 		UPDATE STUDENTS SET NAME = #{name}, EMAIL = #{email}, PHONE = #{phone} WHERE STUD_ID = #{studId}
 	</update>
 	
+	<update id="updateSetStudent" parameterType="Student">
+		UPDATE STUDENTS
+		<set>
+			<if test="name != null">NAME = #{name},</if>
+			<if test="email != null">EMAIL = #{email},</if>
+			<if test="phone != null">PHONE = #{phone},</if>
+			<if test="dob != null">DOB = #{dob}</if>
+		</set>
+		<include refid="whereSQL" />
+	</update>
+	
 	<delete id="deleteStudent" parameterType="Student">
 		DELETE FROM STUDENTS WHERE STUD_ID = #{studId}
 	</delete>
